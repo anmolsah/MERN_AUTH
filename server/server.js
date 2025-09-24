@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/mongodb.js";
+import authRouter from "./routes/authRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -15,6 +16,7 @@ app.use(cors({ credentials: true }));
 app.get("/", (req, res) => {
   res.send("the server is working fine");
 });
+app.use("/api/auth",authRouter)
 
 app.listen(port, () => {
   console.log(`Running in port : ${port}`);

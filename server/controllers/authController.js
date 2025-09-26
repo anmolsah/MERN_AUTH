@@ -93,3 +93,21 @@ export const logout = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+export const sendVerifyOtp = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const user = await userModel.findById(userId);
+    if (user.isAccountVerified) {
+      return res.json({ success: false, message: "Account already verified" });
+    }
+
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    user.verifyOtp = otp;
+    user.verifyOtpExpiresAt = Date.now() + 20 * 60 * 1000; // 20 minutes from now
+    await user.save();
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};

@@ -107,6 +107,17 @@ export const sendVerifyOtp = async (req, res) => {
     user.verifyOtp = otp;
     user.verifyOtpExpiresAt = Date.now() + 20 * 60 * 1000; // 20 minutes from now
     await user.save();
+
+    const mailOption = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Account Verification OTP",
+      text: `Hello ${user.name},\n\nYour verification OTP is ${otp}. It will expire in 20 minutes.\n\nBest regards,\nThe Team`,
+    };
+
+    await transporter.sendmail(mailOption);
+
+    res.json({ success: true, message: "OTP sent to your email" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }

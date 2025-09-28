@@ -115,7 +115,7 @@ export const sendVerifyOtp = async (req, res) => {
       text: `Hello ${user.name},\n\nYour verification OTP is ${otp}. It will expire in 20 minutes.\n\nBest regards,\nThe Team`,
     };
 
-    await transporter.sendmail(mailOption);
+    await transporter.sendMail(mailOption);
 
     return res.json({ success: true, message: "OTP sent to your email" });
   } catch (error) {

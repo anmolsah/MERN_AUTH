@@ -193,3 +193,26 @@ export const sendResetOtp = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+//reset user password
+export const resetPassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  if (!email || !otp || !newPassword) {
+    return res.json({ success: false, message: "All fields are required" });
+  }
+
+  try {
+    const user = await usermodel.findOne({ email });
+    if (!user) {
+      return res.json({ success: false, message: "User does not exist" });
+    }
+
+    if (user.resetOtp === "" || user.resetOtp !== otp) {
+      return res.json({ success: false, message: "Invalid OTP" });
+    }
+
+    if()
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};

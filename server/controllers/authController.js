@@ -153,12 +153,43 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
-
 //checking if user is authenticated or not
-export const isAuthenticated = async(req,res)=>{
-try {
-  return res.json({success:true});
-} catch (error) {
-  return res.json({ success: false, message: error.message });
-}
-}
+export const isAuthenticated = async (req, res) => {
+  try {
+    return res.json({ success: true });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const sendResetOtp = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.json({ success: false, message: "Email is required" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.json({ success: false, message: "User does not exist" });
+    }
+
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    user.resetOtp = otp;
+    user.resetOtpExpireAt = Date.now() + 20 * 60 * 1000; // 20 minutes from now
+    await user.save();
+
+    const mailOption = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Password Reset OTP",
+      text: `Hello ${user.name},\n\nYour password reset OTP is ${otp}. It will expire in 20 minutes.\n\nBest regards,\nThe Team`,
+    };
+
+    await transporter.sendMail(mailOption);
+    return res.json({ success: true, message: "OTP sent to your email" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};

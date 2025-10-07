@@ -1,8 +1,10 @@
 import logo from "./logo.png";
 import logo1 from "./logo1.png"
+import mern from "./MERN.png"
 
 
 export const assets ={
     logo,
-    logo1
+    logo1,
+    mern
 }

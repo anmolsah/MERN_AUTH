@@ -4,6 +4,7 @@ import { LockKeyhole, Mail, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,11 +31,23 @@ const Login = () => {
           setIsLoggedIn(true);
           navigate("/");
         } else {
-          alert(data.message);
+          toast.error(data.message);
         }
       } else {
+        const { data } = await axios.post(backendUrl + "api/auth/login", {
+          email,
+          password,
+        });
+        if (data.success) {
+          setIsLoggedIn(true);
+          navigate("/");
+        } else {
+          toast.error(data.message);
+        }
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (

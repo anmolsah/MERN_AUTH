@@ -1,14 +1,41 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "./../assets/assets";
 import { LockKeyhole, Mail, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const { backendUrl, setIsLoggedIn } = useContext(AppContext);
+
   const [state, setState] = useState("Sign Up");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const onSubmitHandler = async (e) => {
+    try {
+      e.preventDefault();
+      //send cookies also with the data
+      axios.defaults.withCredentials = true;
+      if (state === "Sign Up") {
+        const { data } = await axios.post(backendUrl + "api/auth/register", {
+          name,
+          email,
+          password,
+        });
+        if (data.success) {
+          setIsLoggedIn(true);
+          navigate("/");
+        } else {
+          alert(data.message);
+        }
+      } else {
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-blue-200 to-white">
@@ -28,7 +55,7 @@ const Login = () => {
             : "Login to your Account"}
         </p>
 
-        <form>
+        <form onSubmit={onSubmitHandler}>
           {state === "Sign Up" && (
             <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#2e334b]">
               <User />

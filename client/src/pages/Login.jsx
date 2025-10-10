@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const Login = () => {
   const navigate = useNavigate();
 
-  const { backendUrl, setIsLoggedIn } = useContext(AppContext);
+  const { backendUrl, setIsLoggedIn,getUserData } = useContext(AppContext);
 
   const [state, setState] = useState("Sign Up");
   const [name, setName] = useState("");
@@ -22,24 +22,26 @@ const Login = () => {
       //send cookies also with the data
       axios.defaults.withCredentials = true;
       if (state === "Sign Up") {
-        const { data } = await axios.post(backendUrl + "api/auth/register", {
+        const { data } = await axios.post(backendUrl + "/api/auth/register", {
           name,
           email,
           password,
         });
         if (data.success) {
           setIsLoggedIn(true);
+          getUserData();
           navigate("/");
         } else {
           toast.error(data.message);
         }
       } else {
-        const { data } = await axios.post(backendUrl + "api/auth/login", {
+        const { data } = await axios.post(backendUrl + "/api/auth/login", {
           email,
           password,
         });
         if (data.success) {
           setIsLoggedIn(true);
+          getUserData();
           navigate("/");
         } else {
           toast.error(data.message);

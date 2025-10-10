@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 const Header = () => {
+  const { userData } = useContext(AppContext);
+
   return (
     <div className="flex flex-col items-center mt-28 md:mt-32 px-4 text-center">
       <h2 className="text-base font-semibold text-indigo-600 tracking-wide uppercase">
-        Hey Developer
+        Hey {userData ? userData.name : "Developer"}!
       </h2>
 
       <h1 className="mt-2 text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">

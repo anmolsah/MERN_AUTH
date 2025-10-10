@@ -58,7 +58,7 @@ const Login = () => {
         onClick={() => navigate("/")}
         src={assets.mern}
         alt="logo"
-        className="absolute left-5 sm;left-20 top-5 w-28 sm:w-32 cursor-pointer"
+        className="absolute left-5 sm:left-20 top-5 w-28 sm:w-32 cursor-pointer"
       />
       <div className="bg-slate-900 p-10 rounded-lg shadow-lg width-full sm:w-96 text-indigo-300 text-sm">
         <h2 className="text-3xl font-semibold text-white text-center mb-3">

@@ -10,6 +10,21 @@ const EmailVerify = () => {
     }
   };
 
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && e.target.value === "" && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    const paste = e.clipboardData.getData("text");
+    const pasteArray = paste.split("");
+    pasteArray.forEach((char, index) => {
+      if (inputRefs.current[index]) {
+        inputRefs.current[index].value = char;
+      }
+    });
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-white">
@@ -25,13 +40,14 @@ const EmailVerify = () => {
         <p className="text-center mb-6 text-indigo-300">
           Enter the 6-digit verification code sent to your email
         </p>
-        <div className="flex justify-between mb-8">
+        <div className="flex justify-between mb-8" onPaste={handlePaste}>
           {Array(6)
             .fill(0)
             .map((_, index) => (
               <input
                 ref={(e) => (inputRefs.current[index] = e)}
                 onInput={(e) => handleInput(e, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
                 type="text"
                 maxLength="1"
                 key={index}
